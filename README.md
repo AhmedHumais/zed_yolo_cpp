@@ -10,16 +10,14 @@ The left image will be used to display the detected objects alongside the distan
 
 ## Prerequisites
 
-- Windows 7 64bits or later, Ubuntu 16.04
-- [ZED SDK](https://www.stereolabs.com/developers/) and its dependencies ([CUDA](https://developer.nvidia.com/cuda-downloads))
+- Windows 7 64bits or later, Ubuntu 18.04
 
-## How to use YOLO 3D in Python
+- [ZED SDK 3.x](https://www.stereolabs.com/developers/) and its dependencies ([CUDA](https://developer.nvidia.com/cuda-downloads))
 
-Please refer to instructions in [zed_python_sample](./zed_python_sample)
 
 ## How to use YOLO 3D in C++ (Linux only)
 
-Please refer to instructions in [zed_cpp_sample](./zed_cpp_sample)
+use cmake to build
 
 ## Using Docker
 
