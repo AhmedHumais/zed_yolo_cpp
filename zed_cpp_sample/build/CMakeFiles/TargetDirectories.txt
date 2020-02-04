@@ -1,0 +1,3 @@
+/home/ahmed/zed-yolo/zed_cpp_sample/build/CMakeFiles/rebuild_cache.dir
+/home/ahmed/zed-yolo/zed_cpp_sample/build/CMakeFiles/darknet_zed.dir
+/home/ahmed/zed-yolo/zed_cpp_sample/build/CMakeFiles/edit_cache.dir

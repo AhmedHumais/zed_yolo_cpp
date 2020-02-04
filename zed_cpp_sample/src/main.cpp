@@ -15,7 +15,7 @@
 #define OPENCV
 #define GPU
 
-#include <sl_zed/Camera.hpp>
+#include <sl/Camera.hpp>
 
 #include "yolo_v2_class.hpp"    // https://github.com/AlexeyAB/darknet/blob/master/src/yolo_v2_class.hpp
 #include <opencv2/opencv.hpp>
@@ -55,7 +55,7 @@ std::vector<bbox_t_3d> getObjectDepth(std::vector<bbox_t> &bbox_vect, sl::Mat &x
                 for (int x = -R; x <= R; x++) {
                     i = center_i + x;
                     j = center_j + y;
-                    xyzrgba.getValue<sl::float4>(i, j, &out, sl::MEM_CPU);
+                    xyzrgba.getValue<sl::float4>(i, j, &out, sl::MEM::CPU);
                     valid_measure = std::isfinite(out.z);
                     if (valid_measure) {
                         x_vect.push_back(out.x);
@@ -112,34 +112,34 @@ cv::Mat slMat2cvMat(sl::Mat &input) {
     // Mapping between MAT_TYPE and CV_TYPE
     int cv_type = -1;
     switch (input.getDataType()) {
-        case sl::MAT_TYPE_32F_C1:
+        case sl::MAT_TYPE::F32_C1:
             cv_type = CV_32FC1;
             break;
-        case sl::MAT_TYPE_32F_C2:
+        case sl::MAT_TYPE::F32_C2:
             cv_type = CV_32FC2;
             break;
-        case sl::MAT_TYPE_32F_C3:
+        case sl::MAT_TYPE::F32_C3:
             cv_type = CV_32FC3;
             break;
-        case sl::MAT_TYPE_32F_C4:
+        case sl::MAT_TYPE::F32_C4:
             cv_type = CV_32FC4;
             break;
-        case sl::MAT_TYPE_8U_C1:
+        case sl::MAT_TYPE::U8_C1:
             cv_type = CV_8UC1;
             break;
-        case sl::MAT_TYPE_8U_C2:
+        case sl::MAT_TYPE::U8_C2:
             cv_type = CV_8UC2;
             break;
-        case sl::MAT_TYPE_8U_C3:
+        case sl::MAT_TYPE::U8_C3:
             cv_type = CV_8UC3;
             break;
-        case sl::MAT_TYPE_8U_C4:
+        case sl::MAT_TYPE::U8_C4:
             cv_type = CV_8UC4;
             break;
         default:
             break;
     }
-    return cv::Mat(input.getHeight(), input.getWidth(), cv_type, input.getPtr<sl::uchar1>(sl::MEM_CPU));
+    return cv::Mat(input.getHeight(), input.getWidth(), cv_type, input.getPtr<sl::uchar1>(sl::MEM::CPU));
 }
 
 
@@ -180,9 +180,9 @@ int main(int argc, char *argv[]) {
 
     sl::Camera zed;
     sl::InitParameters init_params;
-    init_params.camera_resolution = sl::RESOLUTION_HD720;
-    init_params.coordinate_units = sl::UNIT_METER;
-    if (!filename.empty()) init_params.svo_input_filename.set(filename.c_str());
+    init_params.camera_resolution = sl::RESOLUTION::HD720;
+    init_params.coordinate_units = sl::UNIT::METER;
+    if (!filename.empty()) init_params.input.setFromSVOFile(filename.c_str());
 
     std::cout << zed.open(init_params) << std::endl;
     zed.grab();
@@ -192,7 +192,7 @@ int main(int argc, char *argv[]) {
 
     sl::Mat left, cur_cloud;
     zed.retrieveImage(left);
-    zed.retrieveMeasure(cur_cloud, sl::MEASURE_XYZ);
+    zed.retrieveMeasure(cur_cloud, sl::MEASURE::XYZ);
     slMat2cvMat(left).copyTo(cur_frame);
     exit_flag = false;
     new_data = false;
@@ -201,14 +201,14 @@ int main(int argc, char *argv[]) {
 
     while (!exit_flag) {
 
-        if (zed.grab() == sl::SUCCESS) {
+        if (zed.grab() == sl::ERROR_CODE::SUCCESS) {
             zed.retrieveImage(left);
             data_lock.lock();
             cur_frame = slMat2cvMat(left);
             data_lock.unlock();
             new_data = true;
 
-            zed.retrieveMeasure(cur_cloud, sl::MEASURE_XYZ);
+            zed.retrieveMeasure(cur_cloud, sl::MEASURE::XYZ);
 
             data_lock.lock();
             auto result_vec_draw = getObjectDepth(result_vect, cur_cloud);
