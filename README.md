@@ -13,11 +13,12 @@ The left image will be used to display the detected objects alongside the distan
 - Windows 7 64bits or later, Ubuntu 18.04
 
 - [ZED SDK 3.x](https://www.stereolabs.com/developers/) and its dependencies ([CUDA](https://developer.nvidia.com/cuda-downloads))
-
+- run make in darknet folder to install darknet platform
 
 ## How to use YOLO 3D in C++ (Linux only)
 
-use cmake to build
+use cmake to build then executable can be run as
+./darknet_zed obj.names obj.cfg obj.weights [Optional]video.svo
 
 ## Using Docker
 
