@@ -9,7 +9,7 @@ endif(COMMAND cmake_policy)
 
 SET(EXECUTABLE_OUTPUT_PATH ".")
 
-find_package(ZED 2 REQUIRED)
+find_package(ZED 2 QUIET)
 find_package(CUDA ${ZED_CUDA_VERSION} EXACT REQUIRED)
 find_package(OpenCV REQUIRED)
 
@@ -25,7 +25,7 @@ include_directories(${OPENCV_INCLUDE_DIRS})
 
 link_directories(${ZED_LIBRARY_DIR})
 link_directories(${CUDA_LIBRARY_DIRS})
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libdarknet/)
+link_directories(/home/ahmed/darknet/build-release)
 link_directories(${OpenCV_LIBRARY_DIRS})
 
 FILE(GLOB_RECURSE SRC_FILES src/*.cpp)
@@ -38,5 +38,5 @@ TARGET_LINK_LIBRARIES(${execName}
                         ${ZED_LIBRARIES}
                         ${SPECIAL_OS_LIBS}
                         ${OpenCV_LIBRARIES}
-                        darknet
-                        ${CUDA_CUDA_LIBRARY} ${CUDA_CUDART_LIBRARY} ${CUDA_NPP_LIBRARIES_ZED})
+                        libdark.so
+                        ${CUDA_LIBRARIES} ${CUDA_CUDART_LIBRARY} ${CUDA_NPP_LIBRARIES_ZED})
